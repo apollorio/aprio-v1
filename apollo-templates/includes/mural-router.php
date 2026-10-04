@@ -17,7 +17,58 @@ defined('ABSPATH') || exit;
 add_action(
     'template_redirect',
     function (): void {
+<<<<<<< Updated upstream
         if (! is_user_logged_in()) {
+=======
+        $path = function_exists('apollo_normalize_request_path')
+            ? apollo_normalize_request_path()
+            : '';
+        $is_reserved = function_exists('apollo_is_reserved_virtual_path')
+            && apollo_is_reserved_virtual_path();
+        $logged_in = is_user_logged_in();
+
+        // #region agent log
+        $apollo_mural_dbg = static function (string $hypothesis_id, string $message, array $data): void {
+            $payload = array(
+                'sessionId'    => '161c5c',
+                'runId'        => 'pre-fix',
+                'hypothesisId' => $hypothesis_id,
+                'location'     => 'mural-router.php:template_redirect',
+                'message'      => $message,
+                'data'         => $data,
+                'timestamp'    => (int) round(microtime(true) * 1000),
+            );
+            $line = wp_json_encode($payload) . "\n";
+            foreach (
+                array(
+                    (defined('WP_CONTENT_DIR') ? WP_CONTENT_DIR : '') . '/debug-161c5c.log',
+                    (defined('ABSPATH') ? ABSPATH : '') . 'debug-161c5c.log',
+                ) as $log
+            ) {
+                if ($log !== '/debug-161c5c.log' && $log !== 'debug-161c5c.log') {
+                    // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_file_put_contents
+                    @file_put_contents($log, $line, FILE_APPEND);
+                }
+            }
+
+        };
+        // #endregion
+
+        if (! $logged_in) {
+            // #region agent log
+            if (in_array($path, array('', 'casa', 'home'), true)) {
+                $apollo_mural_dbg(
+                    'C',
+                    'mural skip: guest on landing path',
+                    array(
+                        'path'        => $path,
+                        'is_reserved' => $is_reserved,
+                        'logged_in'   => false,
+                    )
+                );
+            }
+            // #endregion
+>>>>>>> Stashed changes
             return;
         }
 

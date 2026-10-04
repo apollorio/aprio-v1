@@ -12,7 +12,11 @@ $pluginBaseFile = $pluginRootPath . DIRECTORY_SEPARATOR . $pluginDir . '.php';
 return [
     'plugin' => [
         'name' => 'Really Simple Security',
+<<<<<<< Updated upstream
         'version' => '9.8.0',
+=======
+        'version' => '9.8.3',
+>>>>>>> Stashed changes
         'pro' => false,
         'path' => $pluginRootPath,
         'base_path' => $pluginBaseFile,

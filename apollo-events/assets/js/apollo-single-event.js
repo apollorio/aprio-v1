@@ -295,7 +295,102 @@
   Instance.prototype.initHeroVideo = function () {
     var yt = this.q('hero-yt');
     if (!yt) { return; }
+<<<<<<< Updated upstream
     this.later(function () { yt.classList.add('is-on'); }, 2600);
+=======
+    var iframe = yt.querySelector('iframe');
+    if (!iframe) { return; }
+    if (REDUCE) { return; }
+
+    var self = this;
+    var FADE_AFTER_READY_MS = 3500;
+    var SAFETY_MS = 14000;
+    var armed = false;
+    var everFaded = false;
+    var win = iframe.contentWindow;
+
+    function ytCmd(func, args) {
+      try {
+        win.postMessage(JSON.stringify({
+          event: 'command',
+          func: func,
+          args: args || []
+        }), '*');
+      } catch (err) { /* ignore */ }
+    }
+
+    function showVideo() {
+      yt.style.transition = '';
+      yt.classList.add('is-on');
+    }
+
+    function hideVideoToBanner() {
+      /* Snap under banner — do not animate chrome away slowly. */
+      yt.style.transition = 'opacity .12s linear';
+      yt.classList.remove('is-on');
+    }
+
+    function armFade() {
+      if (armed) { return; }
+      armed = true;
+      self.later(function () {
+        everFaded = true;
+        showVideo();
+      }, FADE_AFTER_READY_MS);
+    }
+
+    function onMsg(e) {
+      var origin = String(e && e.origin || '');
+      if (origin.indexOf('youtube.com') === -1 && origin.indexOf('youtube-nocookie.com') === -1) {
+        return;
+      }
+      var data = e.data;
+      if (typeof data === 'string') {
+        try { data = JSON.parse(data); } catch (err) { return; }
+      }
+      if (!data || typeof data !== 'object') { return; }
+
+      if (data.event === 'onReady') {
+        ytCmd('addEventListener', ['onStateChange']);
+        ytCmd('mute');
+        ytCmd('playVideo');
+        return;
+      }
+
+      var state = null;
+      if (data.event === 'onStateChange') {
+        state = typeof data.info === 'number' ? data.info : (data.info && data.info.playerState);
+      } else if (data.event === 'infoDelivery' && data.info && typeof data.info.playerState === 'number') {
+        state = data.info.playerState;
+      }
+
+      /* YT states: -1 unstarted, 0 ended, 1 playing, 2 paused, 3 buffering, 5 cued */
+      if (state === 1) {
+        if (everFaded) { showVideo(); }
+        armFade();
+      } else if (state === 2 || state === 0 || state === 3) {
+        /* Hide bezel behind banner; keep ambient looping. */
+        if (everFaded) { hideVideoToBanner(); }
+        if (state === 2 || state === 0) {
+          ytCmd('playVideo');
+        }
+      }
+    }
+
+    w.addEventListener('message', onMsg);
+
+    iframe.addEventListener('load', function () {
+      try {
+        win.postMessage(JSON.stringify({ event: 'listening', id: 1 }), '*');
+      } catch (err) { /* ignore */ }
+      self.later(function () {
+        if (!armed) { armFade(); }
+      }, 5000);
+    });
+    self.later(function () {
+      if (!armed) { armFade(); }
+    }, SAFETY_MS);
+>>>>>>> Stashed changes
   };
 
   /* ═══════════ RSVP — mesh-gradient warm-up border + status ═══════ */

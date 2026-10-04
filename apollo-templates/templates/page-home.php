@@ -63,8 +63,15 @@ if (function_exists('apollo_render_document_open')) {
     <?php
 }
 ?>
+<<<<<<< Updated upstream
     <!-- Apollo Forms — minimalist underline design system -->
     <script src="https://cdn.apollo.rio.br/v1.0.0/js/forms.js" defer></script>
+=======
+    <?php
+    /* forms.js is NOT on the CDN (live 302 → /erro/404/). Chrome then tries to
+       execute the HTML 404 as a script (MIME block). /casa has no forms. */
+    ?>
+>>>>>>> Stashed changes
 
     <?php if ($css) : ?>
         <link rel="stylesheet" href="<?php echo esc_url($css); ?>">

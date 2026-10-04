@@ -1,0 +1,15 @@
+{
+  "disk": 44,
+  "reg": 50,
+  "match": 44,
+  "missingInReg": [],
+  "missingOnDisk": [
+    "apollo-cena",
+    "apollo-classifieds",
+    "apollo-pwa",
+    "apollo-runtime",
+    "apollo-shortcodes",
+    "apollo-suppliers"
+  ],
+  "wahaOnDisk": true
+}

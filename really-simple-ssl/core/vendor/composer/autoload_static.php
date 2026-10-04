@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitb362f03b12b29b02131a59d9d1231943
+class ComposerStaticInit06da81dcb9b2f11d26c81ce452faa2ea
 {
     public static $files = array (
         'd767e4fc2dc52fe66584ab8c6684783e' => __DIR__ . '/..' . '/adbario/php-dot-notation/src/helpers.php',
@@ -12,12 +12,12 @@ class ComposerStaticInitb362f03b12b29b02131a59d9d1231943
     );
 
     public static $prefixLengthsPsr4 = array (
-        'R' =>
+        'R' => 
         array (
             'ReallySimplePlugins\\RSS\\Core\\Bootstrap\\' => 39,
             'ReallySimplePlugins\\RSS\\Core\\' => 29,
         ),
-        'A' =>
+        'A' => 
         array (
             'Automattic\\Jetpack\\Autoloader\\' => 30,
             'Adbar\\' => 6,
@@ -25,19 +25,19 @@ class ComposerStaticInitb362f03b12b29b02131a59d9d1231943
     );
 
     public static $prefixDirsPsr4 = array (
-        'ReallySimplePlugins\\RSS\\Core\\Bootstrap\\' =>
+        'ReallySimplePlugins\\RSS\\Core\\Bootstrap\\' => 
         array (
             0 => __DIR__ . '/../..' . '/bootstrap',
         ),
-        'ReallySimplePlugins\\RSS\\Core\\' =>
+        'ReallySimplePlugins\\RSS\\Core\\' => 
         array (
             0 => __DIR__ . '/../..' . '/app',
         ),
-        'Automattic\\Jetpack\\Autoloader\\' =>
+        'Automattic\\Jetpack\\Autoloader\\' => 
         array (
             0 => __DIR__ . '/..' . '/automattic/jetpack-autoloader/src',
         ),
-        'Adbar\\' =>
+        'Adbar\\' => 
         array (
             0 => __DIR__ . '/..' . '/adbario/php-dot-notation/src',
         ),
@@ -145,9 +145,9 @@ class ComposerStaticInitb362f03b12b29b02131a59d9d1231943
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitb362f03b12b29b02131a59d9d1231943::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitb362f03b12b29b02131a59d9d1231943::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitb362f03b12b29b02131a59d9d1231943::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit06da81dcb9b2f11d26c81ce452faa2ea::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit06da81dcb9b2f11d26c81ce452faa2ea::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit06da81dcb9b2f11d26c81ce452faa2ea::$classMap;
 
         }, null, ClassLoader::class);
     }

@@ -511,6 +511,113 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 	} /* end initChatAnimations */
 
+<<<<<<< Updated upstream
+=======
+	/* ── Reaction emoji life: entrance + random idle (4–20s) ── */
+	var reactionTimers = [];
+	var reducedMotion = false;
+	try {
+		reducedMotion = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+	} catch (eRM) {}
+
+	function clearReactionTimers() {
+		reactionTimers.forEach(function (t) { clearTimeout(t); });
+		reactionTimers = [];
+	}
+
+	function randomIdleEffect(el) {
+		if (!el || !el.isConnected || typeof gsap === 'undefined') return;
+		var pick = Math.floor(Math.random() * 6);
+		gsap.killTweensOf(el);
+		if (pick === 0) {
+			gsap.to(el, { y: -5, duration: 0.28, yoyo: true, repeat: 1, ease: 'power2.out' });
+		} else if (pick === 1) {
+			gsap.to(el, { rotation: 14, duration: 0.18, yoyo: true, repeat: 3, ease: 'sine.inOut' });
+		} else if (pick === 2) {
+			gsap.to(el, { scale: 1.22, duration: 0.22, yoyo: true, repeat: 1, ease: 'back.out(2)' });
+		} else if (pick === 3) {
+			gsap.fromTo(el, { x: 0 }, { x: 3, duration: 0.08, yoyo: true, repeat: 5, ease: 'power1.inOut' });
+		} else if (pick === 4) {
+			gsap.to(el, { y: -3, rotation: -8, duration: 0.35, yoyo: true, repeat: 1, ease: 'sine.inOut' });
+		} else {
+			gsap.fromTo(el, { scale: 1 }, { scale: 1.12, duration: 0.45, yoyo: true, repeat: 1, ease: 'elastic.out(1, 0.45)' });
+		}
+	}
+
+	function scheduleReactionLife(el) {
+		if (reducedMotion || !el || !el.isConnected) return;
+		var delay = 4000 + Math.random() * 16000;
+		var t = setTimeout(function () {
+			randomIdleEffect(el);
+			scheduleReactionLife(el);
+		}, delay);
+		reactionTimers.push(t);
+	}
+
+	function animateReactionEnter(el) {
+		if (!el || typeof gsap === 'undefined') return;
+		if (reducedMotion) {
+			gsap.set(el, { opacity: 1, scale: 1, y: 0 });
+			return;
+		}
+		gsap.fromTo(el, {
+			opacity: 0,
+			scale: 0.35,
+			y: 10,
+			rotation: -12
+		}, {
+			opacity: 1,
+			scale: 1,
+			y: 0,
+			rotation: 0,
+			duration: 0.45,
+			ease: 'back.out(1.7)',
+			onComplete: function () {
+				scheduleReactionLife(el);
+			}
+		});
+	}
+
+	function initReactionFX() {
+		if (typeof gsap === 'undefined') return;
+		var area = document.querySelector('.ac-messages');
+		if (!area) return;
+
+		function bootExisting() {
+			clearReactionTimers();
+			area.querySelectorAll('.ac-reaction').forEach(function (el) {
+				if (el.dataset.acFx === '1') {
+					scheduleReactionLife(el);
+					return;
+				}
+				el.dataset.acFx = '1';
+				animateReactionEnter(el);
+			});
+		}
+
+		var reactObs = new MutationObserver(function (mutations) {
+			mutations.forEach(function (mut) {
+				mut.addedNodes.forEach(function (node) {
+					if (node.nodeType !== 1) return;
+					var list = [];
+					if (node.classList && node.classList.contains('ac-reaction')) list.push(node);
+					if (node.querySelectorAll) {
+						node.querySelectorAll('.ac-reaction').forEach(function (r) { list.push(r); });
+					}
+					list.forEach(function (el) {
+						if (el.dataset.acFx === '1') return;
+						el.dataset.acFx = '1';
+						animateReactionEnter(el);
+					});
+				});
+			});
+		});
+		reactObs.observe(area, { childList: true, subtree: true });
+		observers.push(reactObs);
+		bootExisting();
+	}
+
+>>>>>>> Stashed changes
 	/* ── Cleanup function to disconnect all observers ── */
 	function cleanupAnimations() {
 		observers.forEach(function(obs) {

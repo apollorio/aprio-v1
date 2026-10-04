@@ -102,6 +102,50 @@ ob_start();
             z-index: 999999 !important;
         }
     </style>
+<<<<<<< Updated upstream
+=======
+    <script>
+    (function () {
+      document.documentElement.classList.add('apollo-chat-page', 'ap-lenis-gated');
+      window.__APOLLO_CHAT_NO_LENIS__ = true;
+
+      /* Lenis smooth-scroll + Apollo's custom scrollbars fight a viewport-
+         locked, section-scroll-only chat app — this forcibly evicts both if
+         the shared runtime mounts them on this page. Kept (this is real
+         defensive logic, not debug instrumentation). */
+      function killLenis() {
+        var L = window.lenis;
+        if (L) {
+          try { if (typeof L.stop === 'function') L.stop(); } catch (e1) {}
+          try { if (typeof L.destroy === 'function') L.destroy(); } catch (e2) {}
+          window.lenis = null;
+        }
+        document.documentElement.classList.remove('lenis');
+        document.documentElement.classList.add('apollo-chat-page', 'ap-lenis-gated');
+        ['apollo-sb-y', 'apollo-sb-x'].forEach(function (id) {
+          var el = document.getElementById(id);
+          if (el && el.parentNode) el.parentNode.removeChild(el);
+        });
+      }
+
+      killLenis();
+      window.addEventListener('apollo:ready', killLenis, { once: true });
+      window.addEventListener('apollo:lenis-ready', killLenis, { once: true });
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', killLenis);
+      }
+      var hits = 0;
+      var mo = new MutationObserver(function () {
+        if (document.documentElement.classList.contains('lenis') || window.lenis) {
+          killLenis();
+          hits += 1;
+          if (hits >= 4) mo.disconnect();
+        }
+      });
+      mo.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+    })();
+    </script>
+>>>>>>> Stashed changes
 <?php
 $extra_head = ob_get_clean();
 

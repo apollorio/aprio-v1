@@ -445,6 +445,21 @@
       }
     }
 
+<<<<<<< Updated upstream
+=======
+    var isPhone = !!(window.matchMedia && window.matchMedia(CASA_PHONE_MQ).matches);
+    var cardTravel = isPhone ? 28 : 44;
+
+    // #region agent log
+    function dbgCasaReveal(phase, stId, el, hypothesisId) {
+      try {
+        var r = el.getBoundingClientRect();
+        var vh = window.innerHeight || 0;
+      } catch (e) { /* ignore */ }
+    }
+    // #endregion
+
+>>>>>>> Stashed changes
     var hero = document.querySelector('.nh-hero');
     var heroVid = document.querySelector('.nh-hero-vid');
     /* .nh-hero-title's text now rotates on a timer (item 002 — see the
