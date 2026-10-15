@@ -64950,7 +64950,8 @@
           "apollo_wa_join"
         ]
       },
-      "$registry_gap_closed": "On disk since branch cursor/registry-all-plugins-incl-waha; previously skipped in coordinator scans. Entry created 2026-09-15."
+      "$registry_gap_closed": "On disk since branch cursor/registry-all-plugins-incl-waha; previously skipped in coordinator scans. Entry created 2026-09-15.",
+      "$version_note": "Docblock and APOLLO_WAHA_VER constant read 0.1.0-pre; registry uses 0.1.0 to match doctor.js docblock regex."
     },
     "apollo-wow": {
       "slug": "apollo-wow",
