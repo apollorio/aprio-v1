@@ -190,6 +190,11 @@ bash _inventory/_current/cloud-agent-install.sh
 Installs nothing from npm (no root `package.json`). Ensures Node ≥20, Python ≥3.10,
 PHP CLI (for portal H2/H3), and `git config core.hooksPath .githooks`.
 
+On each boot the environment `start` sets `core.hooksPath` again — `install` does
+not re-run when an agent boots from a build — and serves this tree at
+`http://127.0.0.1:8765/`. Portal sandbox:
+`http://127.0.0.1:8765/apollo-events/_sandbox/portal-harness.html`.
+
 **Prove the environment:**
 
 ```bash
@@ -204,7 +209,14 @@ There is **no local WordPress** in this repo. Live smoke against
 HTML artefacts under each plugin's `_sandbox/` can be served with
 `python3 -m http.server` for structural UI checks.
 
-As of Cloud Agent setup (2026-08-26), expected harness table is roughly
-**2 green / 3 red** (product debt, not env failure): dj + email green; portal
-E29 / casa duplicate selectors / CPT surface G2 still red. Do not "fix" those
-as part of env bootstrap.
+As of Cloud Agent setup (2026-10-16), the harness table is **4 green / 2 red**
+(product debt, not env failure): adverts, djs (16/16), email (26/26) and portal
+(53/53, H2/H3 included once `php` is on PATH) green; `apollo-core` CPT surface
+G2 and `/casa` duplicate selectors still red. Do not "fix" those as part of env
+bootstrap.
+
+`apollo-guard --baseline .apollo-guard-baseline.json` runs. On 2026-10-16 it
+exits 1: the baseline dated 2026-09-03 does not cover later CRITICAL/HIGH
+findings (G02 in `apollo-waha`, unguarded C02 calls, D03/D04). That exit is
+product debt. A missing `php` binary is the environment failure — portal H2/H3
+skip.
